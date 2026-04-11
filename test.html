@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPark • Hệ thống quản lý bãi đỗ xe</title>
+    <!-- Font & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
+            padding: 24px;
+            color: #0f172a;
+        }
+
+        .app {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #ffffff;
+            padding: 16px 28px;
+            border-radius: 60px;
+            box-shadow: 0 8px 20px -6px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: #e6f0ff;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2563eb;
+            font-size: 24px;
+        }
+
+        .logo-text h2 {
+            font-weight: 700;
+            font-size: 20px;
+            letter-spacing: -0.02em;
+            color: #0b1e42;
+        }
+
+        .logo-text p {
+            font-size: 13px;
+            color: #5b687c;
+            margin-top: 2px;
+        }
+
+        .header-time {
+            background: #f8fafc;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 500;
+            font-size: 15px;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-time i {
+            color: #2563eb;
+            font-size: 18px;
+        }
+
+        .dashboard-main {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .left-column {
+            flex: 2;
+            min-width: 500px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .right-column {
+            flex: 1;
+            min-width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .card-modern {
+            background: #ffffff;
+            border-radius: 32px;
+            padding: 24px 28px;
+            box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f0f4f9;
+            transition: all 0.2s ease;
+        }
+
+        .card-modern:hover {
+            box-shadow: 0 20px 35px -14px rgba(37, 99, 235, 0.12);
+        }
+
+        .card-header-modern {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-header-modern h3 {
+            font-weight: 600;
+            font-size: 18px;
+            color: #13294e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-header-modern h3 i {
+            color: #2563eb;
+            font-size: 22px;
+            background: #eef4ff;
+            padding: 8px;
+            border-radius: 16px;
+        }
+
+        .badge-light {
+            background: #eef4ff;
+            color: #2563eb;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .sensor-parking-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .sensor-panel {
+            flex: 1.2;
+            min-width: 220px;
+        }
+
+        .parking-panel {
+            flex: 1;
+            min-width: 240px;
+        }
+
+        .sensor-mini-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .sensor-item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafc;
+            padding: 16px 20px;
+            border-radius: 24px;
+            border: 1px solid #e9edf3;
+        }
+
+        .sensor-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .sensor-icon-box {
+            width: 46px;
+            height: 46px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+        }
+
+        .sensor-text {
+            font-weight: 600;
+            font-size: 16px;
+            color: #1e293b;
+        }
+
+        .sensor-value-badge {
+            font-weight: 700;
+            font-size: 18px;
+            padding: 8px 18px;
+            border-radius: 40px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .value-safe {
+            color: #0f973d;
+            background: #e6f7eb;
+        }
+        .value-warning {
+            color: #bc1c1e;
+            background: #ffeaea;
+        }
+
+        /* 3 slot parking */
+        .slot-pair {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .slot-modern {
+            flex: 1;
+            min-width: 120px;
+            background: #f8fafc;
+            border-radius: 28px;
+            padding: 22px 0;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: 0.2s;
+        }
+
+        .slot-modern.occupied {
+            background: #fff2f0;
+            border-color: #fda29b;
+        }
+        .slot-modern.empty {
+            background: #f0f9f0;
+            border-color: #a6f4c5;
+        }
+
+        .slot-icon-lg {
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+        .slot-label {
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+        .slot-desc {
+            font-size: 14px;
+            color: #42526b;
+            font-weight: 500;
+        }
+
+        .search-bar-duo {
+            display: flex;
+            gap: 12px;
+            margin: 16px 0 22px;
+        }
+        .search-input-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background: #f1f5f9;
+            border-radius: 48px;
+            padding: 4px 16px;
+            border: 1px solid #dde3ed;
+        }
+        .search-input-wrapper i {
+            color: #7b8aa5;
+            font-size: 16px;
+            margin-right: 8px;
+        }
+        .search-input-wrapper input {
+            border: none;
+            background: transparent;
+            padding: 14px 0;
+            width: 100%;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 24px;
+            background: #f9fcff;
+            max-height: 380px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th {
+            text-align: left;
+            padding: 18px 16px;
+            background: #ecf3fa;
+            color: #1e3a6b;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(4px);
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid #e2eaf2;
+        }
+
+        .uid-clickable {
+            color: #2563eb;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px dotted #a9c5f0;
+        }
+
+        .status-chip {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .status-in {
+            background: #deefe6;
+            color: #11734c;
+        }
+        .status-waiting {
+            background: #fff2d4;
+            color: #b55f0a;
+        }
+
+        .action-micro {
+            background: none;
+            border: 1px solid #cdddec;
+            border-radius: 30px;
+            padding: 6px 14px;
+            font-size: 13px;
+            color: #1f4a8a;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        .action-micro:hover {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+        }
+
+        .compact-card {
+            background: white;
+            border-radius: 28px;
+            padding: 22px 24px;
+        }
+
+        .topup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-top: 10px;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .field-group label {
+            font-weight: 600;
+            color: #334155;
+            font-size: 14px;
+            margin-left: 6px;
+        }
+        .field-group input, .field-group select {
+            background: #f1f6fc;
+            border: 1px solid #dae2ed;
+            border-radius: 30px;
+            padding: 14px 20px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .btn-modern {
+            border: none;
+            background: #2563eb;
+            color: white;
+            font-weight: 600;
+            padding: 16px 28px;
+            border-radius: 40px;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.15s;
+            border: 1px solid transparent;
+        }
+        .btn-modern-outline {
+            background: transparent;
+            border: 1px solid #cad9f0;
+            color: #1f3a68;
+        }
+        .btn-modern-outline:hover {
+            background: #eaf1fd;
+        }
+        .btn-modern:hover {
+            background: #1a4ed8;
+            transform: scale(1.02);
+        }
+
+        .config-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 18px 0;
+        }
+
+        .insufficient-banner {
+            background: #fee9e7;
+            border-left: 7px solid #d0302f;
+            padding: 16px 20px;
+            border-radius: 18px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .logs-timeline {
+            max-height: 280px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-right: 6px;
+        }
+
+        .log-entry {
+            background: #f7fafd;
+            border-radius: 24px;
+            padding: 16px 18px;
+            border-left: 6px solid transparent;
+            font-size: 13.5px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.01);
+        }
+
+        .log-entry.rfid { border-left-color: #3b82f6; background: #f0f6ff; }
+        .log-entry.plate { border-left-color: #10b981; background: #ecfdf5; }
+        .log-entry.gate { border-left-color: #f59e0b; background: #fffbeb; }
+        .log-entry.warning { border-left-color: #ef4444; background: #fef2f2; }
+
+        .log-time {
+            color: #5f6f8a;
+            font-size: 12px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .log-message {
+            font-weight: 500;
+            color: #1a2a44;
+        }
+
+        .log-uid {
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .time-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0;
+        }
+
+        .footer-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            margin-top: 6px;
+        }
+
+        .log-ctrl {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        #insufficientBalanceAlert {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="app-header">
+            <div class="logo-area">
+                <div class="logo-icon"><i class="fa-solid fa-parking"></i></div>
+                <div class="logo-text">
+                    <h2>iPark · thông minh</h2>
+                    <p>Giám sát bãi đỗ xe</p>
+                </div>
+            </div>
+            <div class="header-time">
+                <i class="fa-regular fa-clock"></i>
+                <span id="system-time">--:--:--</span>
+            </div>
+        </div>
+
+        <div class="insufficient-banner" id="insufficientBalanceAlert">
+            <i class="fa-solid fa-triangle-exclamation" style="margin-right: 10px;"></i>
+            <strong>Có xe thiếu tiền, vui lòng nạp thêm để mở cổng!</strong>
+        </div>
+
+        <div class="dashboard-main">
+            <!-- CỘT TRÁI -->
+            <div class="left-column">
+                <!-- Hàng trên: cảm biến + ô đỗ xe -->
+                <div class="card-modern">
+                    <div class="card-header-modern">
+                        <h3><i class="fa-solid fa-chart-line"></i> Trạng thái cảm biến & bãi đỗ</h3>
+                        <span class="badge-light">live</span>
+                    </div>
+                    <div class="sensor-parking-row">
+                        <!-- Cảm biến -->
+                        <div class="sensor-panel">
+                            <div class="sensor-mini-list">
+                                <!-- flame -->
+                                <div class="sensor-item-row">
+                                    <div class="sensor-info">
+                                        <div class="sensor-icon-box"><i class="fa-solid fa-fire"></i></div>
+                                        <span class="sensor-text">Cảm biến lửa</span>
+                                    </div>
+                                    <div class="sensor-value-badge" id="flame-status">Bình thường</div>
+                                </div>
+                                <!-- gas -->
+                                <div class="sensor-item-row">
+                                    <div class="sensor-info">
+                                        <div class="sensor-icon-box"><i class="fa-solid fa-wind"></i></div>
+                                        <span class="sensor-text">Cảm biến gas</span>
+                                    </div>
+                                    <div class="sensor-value-badge" id="gas-status">Bình thường</div>
+                                </div>
+                                <!-- light -->
+                                <div class="sensor-item-row">
+                                    <div class="sensor-info">
+                                        <div class="sensor-icon-box"><i class="fa-regular fa-sun"></i></div>
+                                        <span class="sensor-text">Ánh sáng</span>
+                                    </div>
+                                    <div class="sensor-value-badge" id="light-status">Sáng</div>
+                                </div>
+                                <!-- Nhiệt độ -->
+                                <div class="sensor-item-row">
+                                    <div class="sensor-info">
+                                        <div class="sensor-icon-box"><i class="fa-solid fa-temperature-high"></i></div>
+                                        <span class="sensor-text">Nhiệt độ</span>
+                                    </div>
+                                    <div class="sensor-value-badge" id="temperature-status">--°C</div>
+                                </div>
+                                <!-- Độ ẩm -->
+                                <div class="sensor-item-row">
+                                    <div class="sensor-info">
+                                        <div class="sensor-icon-box"><i class="fa-solid fa-droplet"></i></div>
+                                        <span class="sensor-text">Độ ẩm</span>
+                                    </div>
+                                    <div class="sensor-value-badge" id="humidity-status">--%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 3 ô đỗ xe -->
+                        <div class="parking-panel">
+                            <div class="slot-pair">
+                                <div class="slot-modern empty" id="slot1">
+                                    <div class="slot-icon-lg">🚗</div>
+                                    <div class="slot-label">Vị trí 1</div>
+                                    <div class="slot-desc">Trống</div>
+                                </div>
+                                <div class="slot-modern empty" id="slot2">
+                                    <div class="slot-icon-lg">🚗</div>
+                                    <div class="slot-label">Vị trí 2</div>
+                                    <div class="slot-desc">Trống</div>
+                                </div>
+                                <div class="slot-modern empty" id="slot3">
+                                    <div class="slot-icon-lg">🚗</div>
+                                    <div class="slot-label">Vị trí 3</div>
+                                    <div class="slot-desc">Trống</div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 16px; text-align: center; background: #ecf3fb; border-radius: 60px; padding: 10px; font-size: 14px;">
+                                <i class="fa-regular fa-calendar"></i> Cập nhật: <span id="parking-time">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bảng xe đang đỗ -->
+                <div class="card-modern">
+                    <div class="card-header-modern">
+                        <h3><i class="fa-solid fa-table"></i> Xe trong bãi</h3>
+                        <span class="badge-light">danh sách</span>
+                    </div>
+                    <div class="search-bar-duo">
+                        <div class="search-input-wrapper">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="searchUid" placeholder="Tìm theo UID...">
+                        </div>
+                        <div class="search-input-wrapper">
+                            <i class="fa-solid fa-license"></i>
+                            <input type="text" id="searchPlate" placeholder="Biển số...">
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr><th>UID</th><th>Biển số</th><th>Giờ vào</th><th>Số dư</th><th>Trạng thái</th><th></th></tr>
+                            </thead>
+                            <tbody id="parkingTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI -->
+            <div class="right-column">
+                <!-- Nạp tiền -->
+                <div class="card-modern">
+                    <div class="card-header-modern">
+                        <h3><i class="fa-solid fa-wallet"></i> Nạp tiền</h3>
+                    </div>
+                    <div class="topup-form">
+                        <div class="field-group">
+                            <label>UID</label>
+                            <input type="text" id="topupUid" placeholder="Nhập hoặc click UID">
+                        </div>
+                        <div class="field-group">
+                            <label>Số tiền (VND)</label>
+                            <input type="number" id="topupAmount" placeholder="0">
+                        </div>
+                        <button class="btn-modern" id="topupBtn"><i class="fa-regular fa-credit-card"></i> Nạp ngay</button>
+                        <div id="topupMessage" style="font-size:14px; color:#2563eb;"></div>
+                    </div>
+                </div>
+
+                <!-- Cấu hình giá -->
+                <div class="card-modern">
+                    <div class="card-header-modern">
+                        <h3><i class="fa-solid fa-gear"></i> Cấu hình giá</h3>
+                    </div>
+                    <div class="config-row">
+                        <div class="field-group">
+                            <label>Giá/giờ</label>
+                            <input type="number" id="ratePerHour" value="10000">
+                        </div>
+                        <div class="field-group">
+                            <label>Giá/phút</label>
+                            <input type="number" id="ratePerMinute" value="0">
+                        </div>
+                        <div class="field-group">
+                            <label>Làm tròn</label>
+                            <select id="rounding">
+                                <option value="ceil">Lên (ceil)</option>
+                                <option value="floor">Xuống</option>
+                                <option value="exact">Chính xác</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label>Phí tối thiểu</label>
+                            <input type="number" id="minFee" value="10000">
+                        </div>
+                    </div>
+                    <button class="btn-modern btn-modern-outline" id="saveConfigBtn"><i class="fa-regular fa-floppy-disk"></i> Lưu cấu hình</button>
+                    <div id="configMessage" style="margin-top: 12px; font-size:14px;"></div>
+                </div>
+
+                <!-- Lịch sử hoạt động -->
+                <div class="card-modern">
+                    <div class="card-header-modern">
+                        <h3><i class="fa-regular fa-note-sticky"></i> Lịch sử</h3>
+                        <span class="badge-light">50 gần nhất</span>
+                    </div>
+                    <div class="logs-timeline" id="logContainer"></div>
+                    <div class="log-ctrl">
+                        <button class="btn-modern-outline" id="clearLogsBtn" style="padding:12px 18px;"><i class="fa-regular fa-trash-can"></i> Xóa log</button>
+                        <button class="btn-modern-outline" id="refreshLogsBtn" style="padding:12px 18px;"><i class="fa-regular fa-rotate-right"></i> Làm mới</button>
+                    </div>
+                </div>
+
+                <!-- Thời gian thực -->
+                <div class="card-modern">
+                    <div class="card-header-modern">
+                        <h3><i class="fa-regular fa-clock"></i> Thời gian thực</h3>
+                    </div>
+                    <div class="time-row">
+                        <span>Hệ thống</span>
+                        <strong id="system-time2">--</strong>
+                    </div>
+                    <div class="time-row">
+                        <span>Cập nhật cuối</span>
+                        <strong id="last-update">--</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // ----- Firebase -----
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import { getDatabase, ref, set, update, onValue, onChildAdded, query, limitToLast, remove, get } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_2DztT_WBrN-FgalEOc0CI-kKd_lYxCY",
+            authDomain: "biensoxe-e00fa.firebaseapp.com",
+            databaseURL: "https://biensoxe-e00fa-default-rtdb.firebaseio.com",
+            projectId: "biensoxe-e00fa",
+            storageBucket: "biensoxe-e00fa.appspot.com",
+            messagingSenderId: "1015059485598",
+            appId: "1:1015059485598:web:2d4fb419479af79fbcfc8f",
+            measurementId: "G-6WGTP79VX8"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // DOM elements
+        const tableBody = document.querySelector("#parkingTable");
+        const logContainer = document.getElementById("logContainer");
+        const searchUid = document.getElementById("searchUid");
+        const searchPlate = document.getElementById("searchPlate");
+        const systemTimeEl = document.getElementById("system-time");
+        const systemTimeEl2 = document.getElementById("system-time2");
+        const lastUpdateEl = document.getElementById("last-update");
+        const parkingTimeEl = document.getElementById("parking-time");
+        const topupUid = document.getElementById("topupUid");
+        const topupAmount = document.getElementById("topupAmount");
+        const topupBtn = document.getElementById("topupBtn");
+        const topupMessage = document.getElementById("topupMessage");
+        const insufficientAlert = document.getElementById("insufficientBalanceAlert");
+        const flameStatus = document.getElementById("flame-status");
+        const gasStatus = document.getElementById("gas-status");
+        const lightStatus = document.getElementById("light-status");
+        const temperatureStatus = document.getElementById("temperature-status");
+        const humidityStatus = document.getElementById("humidity-status");
+        const slot1 = document.getElementById("slot1");
+        const slot2 = document.getElementById("slot2");
+        const slot3 = document.getElementById("slot3");
+        const ratePerHour = document.getElementById("ratePerHour");
+        const ratePerMinute = document.getElementById("ratePerMinute");
+        const rounding = document.getElementById("rounding");
+        const minFee = document.getElementById("minFee");
+        const saveConfigBtn = document.getElementById("saveConfigBtn");
+        const configMessage = document.getElementById("configMessage");
+
+        // Hàm cập nhật thời gian
+        function updateTime() {
+            const now = new Date();
+            const str = now.toLocaleString('vi-VN');
+            if (systemTimeEl) systemTimeEl.textContent = str;
+            if (systemTimeEl2) systemTimeEl2.textContent = str;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // Hàm điền UID
+        window.setTopupUid = function(uid) {
+            if (topupUid) topupUid.value = uid;
+            if (topupAmount) topupAmount.focus();
+        };
+
+        // ===== Parking table =====
+        function updateParkingTable(data) {
+            if (!data) {
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Không có dữ liệu</td></tr>';
+                return;
+            }
+            let html = '';
+            const searchUidValue = searchUid ? searchUid.value.toLowerCase() : '';
+            const searchPlateValue = searchPlate ? searchPlate.value.toLowerCase() : '';
+
+            for (let uid in data) {
+                const entry = data[uid];
+                if (!entry.date_out) {
+                    const plate = entry.number_plate || "Đang chờ...";
+                    const dateIn = entry.date_in || "Đang cập nhật...";
+                    const balance = entry.balance || 0;
+                    const status = entry.waiting_payment ? "Chờ thanh toán" : "Đang đỗ";
+                    const statusClass = entry.waiting_payment ? "status-waiting" : "status-in";
+                    
+                    const matchUid = !searchUidValue || uid.toLowerCase().includes(searchUidValue);
+                    const matchPlate = !searchPlateValue || plate.toLowerCase().includes(searchPlateValue);
+                    
+                    if (matchUid && matchPlate) {
+                        html += `<tr>
+                            <td><span class="uid-clickable" onclick="setTopupUid('${uid}')">${uid}</span></td>
+                            <td>${plate}</td>
+                            <td>${dateIn}</td>
+                            <td>${balance.toLocaleString()} VND</td>
+                            <td><span class="status-chip ${statusClass}">${status}</span></td>
+                            <td><button class="action-micro" onclick="setTopupUid('${uid}')">Nạp</button></td>
+                        </tr>`;
+                    }
+                }
+            }
+            if (html === '') html = '<tr><td colspan="6" style="text-align:center;">Không tìm thấy xe</td></tr>';
+            tableBody.innerHTML = html;
+        }
+
+        const parkingRef = ref(db, "ParkingSystem/RFID");
+        onValue(parkingRef, (snapshot) => {
+            updateParkingTable(snapshot.val() || {});
+            if (lastUpdateEl) lastUpdateEl.textContent = new Date().toLocaleString('vi-VN');
+            if (parkingTimeEl) parkingTimeEl.textContent = new Date().toLocaleTimeString('vi-VN');
+        });
+
+        if (searchUid) searchUid.addEventListener("input", () => onValue(parkingRef, (s) => updateParkingTable(s.val() || {})));
+        if (searchPlate) searchPlate.addEventListener("input", () => onValue(parkingRef, (s) => updateParkingTable(s.val() || {})));
+
+        // ===== Sensors & Slots (3 slot) =====
+        const parkingStatusRef = ref(db, "Parking/status");
+        onValue(parkingStatusRef, (snapshot) => {
+            const data = snapshot.val() || {};
+            if (slot1) {
+                if (data.slot1 === "occupied") {
+                    slot1.className = "slot-modern occupied";
+                    slot1.querySelector('.slot-desc').textContent = "Có xe";
+                } else {
+                    slot1.className = "slot-modern empty";
+                    slot1.querySelector('.slot-desc').textContent = "Trống";
+                }
+            }
+            if (slot2) {
+                if (data.slot2 === "occupied") {
+                    slot2.className = "slot-modern occupied";
+                    slot2.querySelector('.slot-desc').textContent = "Có xe";
+                } else {
+                    slot2.className = "slot-modern empty";
+                    slot2.querySelector('.slot-desc').textContent = "Trống";
+                }
+            }
+            if (slot3) {
+                if (data.slot3 === "occupied") {
+                    slot3.className = "slot-modern occupied";
+                    slot3.querySelector('.slot-desc').textContent = "Có xe";
+                } else {
+                    slot3.className = "slot-modern empty";
+                    slot3.querySelector('.slot-desc').textContent = "Trống";
+                }
+            }
+        });
+
+        // ===== Warnings =====
+        const warningsRef = ref(db, "Warnings");
+        onValue(warningsRef, (snapshot) => {
+            const data = snapshot.val() || {};
+            if (flameStatus) {
+                if (data.flame) {
+                    flameStatus.textContent = "🔥 CÓ LỬA!";
+                    flameStatus.className = "sensor-value-badge value-warning";
+                } else {
+                    flameStatus.textContent = "Bình thường";
+                    flameStatus.className = "sensor-value-badge value-safe";
+                }
+            }
+            if (gasStatus) {
+                if (data.gas) {
+                    gasStatus.textContent = "⚠️ RÒ RỈ GAS!";
+                    gasStatus.className = "sensor-value-badge value-warning";
+                } else {
+                    gasStatus.textContent = "Bình thường";
+                    gasStatus.className = "sensor-value-badge value-safe";
+                }
+            }
+            if (lightStatus) {
+                lightStatus.textContent = data.light ? "Tối" : "Sáng";
+            }
+        });
+
+        // ===== Environment (DHT11) =====
+        const envRef = ref(db, "Environment");
+        onValue(envRef, (snapshot) => {
+            const data = snapshot.val() || {};
+            if (temperatureStatus) {
+                temperatureStatus.textContent = data.temperature ? data.temperature.toFixed(1) + "°C" : "--°C";
+            }
+            if (humidityStatus) {
+                humidityStatus.textContent = data.humidity ? data.humidity.toFixed(0) + "%" : "--%";
+            }
+        });
+
+        // ===== Insufficient balance alert =====
+        const insufficientRef = ref(db, "Gate/insufficient_balance");
+        onValue(insufficientRef, (snapshot) => {
+            if (insufficientAlert) {
+                insufficientAlert.style.display = snapshot.val() === true ? "flex" : "none";
+            }
+        });
+
+        // ===== Logs handling =====
+        function parseLogTime(timestamp) {
+            if (!timestamp) return 0;
+            if (typeof timestamp === 'number') return timestamp;
+            if (typeof timestamp === 'string') {
+                try {
+                    let match = timestamp.match(/(\d{2}):(\d{2}):(\d{2})\s+(\d{2})\/(\d{2})\/(\d{4})/);
+                    if (match) {
+                        const [_, hour, minute, second, day, month, year] = match;
+                        return new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`).getTime();
+                    }
+                    match = timestamp.match(/(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2}):(\d{2})/);
+                    if (match) {
+                        const [_, year, month, day, hour, minute, second] = match;
+                        return new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`).getTime();
+                    }
+                } catch (e) {}
+            }
+            return 0;
+        }
+
+        function formatLogTime(timestamp) {
+            if (!timestamp) return "Không rõ";
+            if (typeof timestamp === 'number') {
+                return new Date(timestamp).toLocaleString('vi-VN');
+            }
+            return timestamp;
+        }
+
+        function addLogToUI(log, key) {
+            if (!logContainer) return;
+            const logItem = document.createElement("div");
+            logItem.className = "log-entry";
+            logItem.dataset.key = key;
+            
+            const timeValue = parseLogTime(log.timestamp);
+            if (timeValue > 0) logItem.dataset.timestamp = timeValue;
+            
+            let type = "rfid";
+            if (log.message && (log.message.includes("biển số") || log.message.includes("OCR") || log.message.includes("chụp ảnh"))) type = "plate";
+            else if (log.message && (log.message.includes("cổng") || log.message.includes("mở") || log.message.includes("đóng"))) type = "gate";
+            else if (log.message && (log.message.includes("CẢNH BÁO") || log.message.includes("lỗi") || log.message.includes("KHÔNG") || log.message.includes("❌"))) type = "warning";
+            
+            logItem.classList.add(type);
+            
+            let timeStr = formatLogTime(log.timestamp);
+            let uid = log.uid || "SYSTEM";
+            let uidDisplay = uid;
+            if (uid === "unknown" || uid === "SYSTEM") uidDisplay = `<span style="color:#64748b;">${uid}</span>`;
+            else uidDisplay = `<span class="log-uid">${uid}</span>`;
+            
+            logItem.innerHTML = `<div class="log-time"><i class="fa-regular fa-clock"></i> ${timeStr}</div>
+                <div class="log-message">${uidDisplay}: ${log.message || ""}</div>`;
+            
+            logContainer.appendChild(logItem);
+            logContainer.scrollTop = logContainer.scrollHeight;
+            while (logContainer.children.length > 50) logContainer.removeChild(logContainer.firstChild);
+        }
+
+        const logsRef = query(ref(db, "Logs"), limitToLast(50));
+        onChildAdded(logsRef, (snapshot) => addLogToUI(snapshot.val(), snapshot.key));
+        onValue(logsRef, (snapshot) => {
+            if (!logContainer) return;
+            logContainer.innerHTML = '';
+            const logs = snapshot.val();
+            if (logs) {
+                const logsArray = Object.entries(logs);
+                const logsWithTime = logsArray.map(([key, value]) => ({ key, ...value, parsedTime: parseLogTime(value.timestamp) }));
+                logsWithTime.sort((a,b) => (a.parsedTime || 0) - (b.parsedTime || 0));
+                logsWithTime.forEach(item => {
+                    const { key, parsedTime, ...logData } = item;
+                    addLogToUI(logData, key);
+                });
+            }
+        });
+
+        document.getElementById("clearLogsBtn")?.addEventListener("click", async () => {
+            if (confirm("Xóa toàn bộ lịch sử?")) {
+                await remove(ref(db, "Logs"));
+                if (logContainer) logContainer.innerHTML = '';
+            }
+        });
+
+        document.getElementById("refreshLogsBtn")?.addEventListener("click", () => {
+            onValue(logsRef, (snapshot) => {
+                if (logContainer) logContainer.innerHTML = '';
+                // (sẽ tự động thêm lại từ onChildAdded)
+            });
+        });
+
+        // ===== Top-up =====
+        topupBtn?.addEventListener("click", async () => {
+            const uid = topupUid.value.trim();
+            const amount = parseInt(topupAmount.value);
+            if (!uid || isNaN(amount) || amount <= 0) return alert("Nhập UID và số tiền hợp lệ!");
+            try {
+                const uidRef = ref(db, `ParkingSystem/RFID/${uid}`);
+                const snapshot = await get(uidRef);
+                if (!snapshot.exists()) return alert("UID không tồn tại!");
+                const data = snapshot.val();
+                const currentBalance = data.balance || 0;
+                const newBalance = currentBalance + amount;
+                await update(uidRef, { balance: newBalance });
+                if (data.waiting_payment && data.fee_due && newBalance >= data.fee_due) {
+                    const fee = data.fee_due;
+                    await update(uidRef, {
+                        balance: newBalance - fee,
+                        waiting_payment: false,
+                        fee_due: 0,
+                        status: 1,
+                        date_out: new Date().toLocaleString('vi-VN').replace(',', '')
+                    });
+                    await update(ref(db, "Gate"), { exit_open: true, exit_uid: uid, insufficient_balance: false });
+                    topupMessage.innerHTML = `✅ Nạp ${amount} VND, xe đã thanh toán và mở cổng.`;
+                } else {
+                    topupMessage.innerHTML = `✅ Nạp ${amount} VND thành công! Số dư: ${newBalance} VND.`;
+                }
+                topupAmount.value = '';
+            } catch (e) { console.error(e); alert("Lỗi!"); }
+        });
+
+        // ===== Config =====
+        const configRef = ref(db, "/Config/parking_fee");
+        onValue(configRef, (snapshot) => {
+            const cfg = snapshot.val() || {};
+            if (ratePerHour) ratePerHour.value = cfg.rate_per_hour || 10000;
+            if (ratePerMinute) ratePerMinute.value = cfg.rate_per_minute || 0;
+            if (rounding) rounding.value = cfg.rounding || 'ceil';
+            if (minFee) minFee.value = cfg.min_fee || 10000;
+        });
+
+        saveConfigBtn?.addEventListener("click", async () => {
+            const config = {
+                rate_per_hour: parseInt(ratePerHour.value) || 0,
+                rate_per_minute: parseInt(ratePerMinute.value) || 0,
+                rounding: rounding.value,
+                min_fee: parseInt(minFee.value) || 0
+            };
+            try {
+                await set(configRef, config);
+                configMessage.innerHTML = '✅ Đã lưu';
+                setTimeout(() => configMessage.innerHTML = '', 2000);
+            } catch (e) { configMessage.innerHTML = '❌ Lỗi'; }
+        });
+
+        set(ref(db, "System/Web/last_active"), Date.now());
+    </script>
+</body>
+</html>
